@@ -62,7 +62,7 @@ for page in urlList:
                         print "We can't fetch it: ", tempURL
                 else:
                     outgoingLinks.append(tempURL)
-
+        #TO-DO:
         #get all links, check if in list already or visited
         #make sure urls are actually different
         #count jpgs
@@ -70,7 +70,7 @@ for page in urlList:
         for x in wordsInPage: #parse and stem words, add to dictionary
             if x not in stopWords:
                 temp = x
-    except:
+    except: #occurs if it is a binary file or non-existent file
         print "Couldn't open that link", page
 
 
