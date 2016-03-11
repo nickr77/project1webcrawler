@@ -41,8 +41,6 @@ stopWords = lines.split()
 
 for page in urlList:
 
-    #print page, "CHECK1"
-
     visitedUrls.append(page)
 
     try:
@@ -51,9 +49,14 @@ for page in urlList:
         wordsInPage = soup.getText().split()
         for link in browse.links():
             tempURL = urlparse.urljoin(link.base_url, link.url)
-            if tempURL not in urlList:
+            #BELOW: gets rid of duplicate urls resulting from index.html/index.htm
+            if tempURL.endswith("index.html"):
+                tempURL = tempURL.replace("index.html", "")
+            elif tempURL.endswith("index.htm"):
+                tempURL = tempURL.replace("index.htm", "")
 
-                #print link
+
+            if tempURL not in urlList:
                 if tempURL.startswith(baseUrl):
                     if robots.can_fetch("*", "/" + link.url):
                         print "WE CAN FETCH IT ", tempURL
@@ -62,15 +65,17 @@ for page in urlList:
                         print "We can't fetch it: ", tempURL
                 else:
                     outgoingLinks.append(tempURL)
-        #TO-DO:
-        #get all links, check if in list already or visited
-        #make sure urls are actually different
-        #count jpgs
-        #if link doesn't work, add to badLinks list
+
         for x in wordsInPage: #parse and stem words, add to dictionary
             if x not in stopWords:
                 temp = x
+                #index words here
     except: #occurs if it is a binary file or non-existent file
         print "Couldn't open that link", page
+        if page.endswith(".jpg"):
+            jpgAmount += 1
 
 
+print outgoingLinks #for debugging, remove once complete
+print urlList
+print "JPEGS: ", jpgAmount
