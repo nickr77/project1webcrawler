@@ -5,6 +5,7 @@ import mechanize
 import urlparse
 import robotparser
 from BeautifulSoup import BeautifulSoup
+from string import digits
 import snowballstemmer
 #Needs to return: list of pages, list of outgoing links, amount of JPG files, save words from .txt .htm .html files, stem words before storing in list/dictionary
 
@@ -44,7 +45,8 @@ lines = stopFile.read()
 stopWords = lines.split()
 
 for page in urlList:
-
+    if docIDCounter > retrieveLimit:
+        break
     visitedUrls.append(page)
 
     try:
@@ -74,7 +76,8 @@ for page in urlList:
 
         for x in wordsInPage: #parse and stem words, add to dictionary
             x = x.replace(",", "") #removes commas before checking for stopwords
-            if x not in stopWords and not set('[~=!@-<>#$%^&*()_+{}":;\']+$').intersection(x): #gets rid of invalid words
+            x = re.sub("[^a-zA-Z]","", x)
+            if x not in stopWords and len(x) > 0:# and not set('[~=!@-<>#$%^&*()_+{}":;\']+$').intersection(x): #gets rid of invalid words
                 temp = x
                 temp = temp.lower()
                 temp = stemmer.stemWord(temp)
@@ -97,7 +100,6 @@ for page in urlList:
 wordFreqency = []
 for x in words.keys():
     wordFreqency.append((str(x), len(words[x])))
-    print len(words[x])
 frequentWords = sorted(wordFreqency, key=lambda x: x[1])
 frequentWords.reverse()
 
