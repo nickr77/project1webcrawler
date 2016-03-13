@@ -5,7 +5,7 @@ setup(
     version='0.1',
     py_modules=['main'],
     url='https://github.com/nickr77/project1webcrawler',
-    install_requires=['BeautifulSoup', 'Mechanize'],
+    install_requires=['BeautifulSoup', 'Mechanize', 'snowballstemmer'],
     author='nickr',
     author_email='robertsn@smu.edu',
     description='Web Crawler Project for CSE 5337; Steven Bock - Nick Roberts'

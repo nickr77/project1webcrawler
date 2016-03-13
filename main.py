@@ -5,6 +5,7 @@ import mechanize
 import urlparse
 import robotparser
 from BeautifulSoup import BeautifulSoup
+import snowballstemmer
 #Needs to return: list of pages, list of outgoing links, amount of JPG files, save words from .txt .htm .html files, stem words before storing in list/dictionary
 
 browse = mechanize.Browser()
@@ -69,13 +70,17 @@ for page in urlList:
         for x in wordsInPage: #parse and stem words, add to dictionary
             if x not in stopWords:
                 temp = x
+
                 #index words here
     except: #occurs if it is a binary file or non-existent file
         print "Couldn't open that link", page
         if page.endswith(".jpg"):
             jpgAmount += 1
+        if browse.response().code == 404:
+            badLinks.append(page)
 
 
-print outgoingLinks #for debugging, remove once complete
-print urlList
+print "OUTGOING LINKS: ",outgoingLinks #for debugging, remove once complete
+print "Good URLS: ",urlList
+print "BAD LINKS: ",badLinks
 print "JPEGS: ", jpgAmount
