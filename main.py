@@ -23,7 +23,6 @@ urlList = [baseUrl]
 visitedUrls = [baseUrl]
 retrieveLimit = 0
 stopWords = ()
-links = []
 outgoingLinks = []
 badLinks = []
 jpgAmount = 0
