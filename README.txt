@@ -22,3 +22,4 @@ Notes:
 Installing python packages/modules is easier in a unix/linux environment, Windows will work but you have to add python to your env variables
 
 Created by Steven Bock and Nicholas Roberts
+CSE 5337
