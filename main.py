@@ -5,15 +5,8 @@ import mechanize
 import urlparse
 import robotparser
 from BeautifulSoup import BeautifulSoup
-from string import digits
 import snowballstemmer
-#Needs to return: list of pages, list of outgoing links, amount of JPG files, save words from .txt .htm .html files, stem words before storing in list/dictionary
-
 browse = mechanize.Browser()
-#CONFIG SECTION
-#browse.set_handle_robots(True)
-
-#END CONFIG SECTION
 #GLOBAL VARS
 baseUrl = "http://lyle.smu.edu/~fmoore/"
 robots = robotparser.RobotFileParser()
