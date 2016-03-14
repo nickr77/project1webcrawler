@@ -31,19 +31,20 @@ docIDCounter = 1
 documentIDs = []
 stemmer = snowballstemmer.stemmer("english")
 #END GLOBAL VARS
+#---------- INPUT -----------
 temp = input("Enter page limit: ")
 retrieveLimit = int(temp)
 stopFile = open("stopwords.txt", "r")
 lines = stopFile.read()
 stopWords = lines.split()
 
+
 print "Crawling Pages, please wait..."
 for page in urlList:
     if docIDCounter > retrieveLimit:
-        break
-    #visitedUrls.append(page)
-
+        break #quits crawling if retrieval limit is reached
     try:
+        #---------- Page Crawler (gets words and links from each page ---------
         browse.open(page)
         soup = BeautifulSoup(browse.response().read()) #if can't parse, assumed to be binary file or 404
         wordsInPage = soup.getText().split()
@@ -58,19 +59,18 @@ for page in urlList:
 
             if tempURL not in urlList:
                 if tempURL.startswith(baseUrl):
-                    if robots.can_fetch("*", "/" + link.url):
-                        #print "WE CAN FETCH IT ", tempURL
+                    if robots.can_fetch("*", "/" + link.url): #checks robots.txt, necessary because of unusual robots.txt location
                         urlList.append(tempURL)
                 else:
                     if tempURL + "/" not in urlList:
                         outgoingLinks.append(tempURL)
 
-        documentIDs.append((docIDCounter, page))
-
+        documentIDs.append((docIDCounter, page)) #if an exception hasn't happened by this point, it is safe to assign the docID
+        #-------------- WORD INDEXER ----------------#
         for x in wordsInPage: #parse and stem words, add to dictionary
             x = x.replace(",", "") #removes commas before checking for stopwords
-            x = re.sub("[^a-zA-Z]","", x)
-            if x not in stopWords and len(x) > 0:# and not set('[~=!@-<>#$%^&*()_+{}":;\']+$').intersection(x): #gets rid of invalid words
+            x = re.sub("[^a-zA-Z]","", x) #removes non-alphabetic characters from words
+            if x not in stopWords and len(x) > 0:
                 temp = x
                 temp = temp.lower()
                 temp = stemmer.stemWord(temp)
@@ -81,21 +81,23 @@ for page in urlList:
                     words[temp].append(docIDCounter)
         docIDCounter += 1 #increments doc ID after successful parsing
 
+    #-------------- Binary File Handler ----------------#
 
-                #index words here
     except: #occurs if it is a binary file or non-existent file
-        #print "Couldn't open that link", page
         if page.endswith(".jpg"):
             jpgAmount += 1
         if browse.response().code == 404:
             badLinks.append(page)
-print "Computing Word frequency"
+print "Computing word frequency..."
+#-------------- Word Freqency Calculator ----------------#
+
 wordFreqency = []
 for x in words.keys():
     wordFreqency.append((str(x), len(words[x])))
 frequentWords = sorted(wordFreqency, key=lambda x: x[1])
 frequentWords.reverse()
 
+#--------------- Console Output ------------------#
 print "Most Frequent Words: ", frequentWords[:20]
 print "OUTGOING LINKS: ",outgoingLinks #for debugging, remove once complete
 print "Good URLS: ",urlList
@@ -103,7 +105,7 @@ print "BAD LINKS: ",badLinks
 print "JPEGS: ", jpgAmount
 print "DOCIDS : ", documentIDs
 
-#FILE WRITING
+#---------FILE WRITING-------------#
 out = open('urlList.txt', 'w') #page List
 out.write('List of all urls visited (or at least attempted to):\n')
 for x in urlList:
@@ -124,8 +126,6 @@ for x in badLinks:
     out.write(x)
     out.write("\n")
 out.close()
-
-
 
 out = open('jpegAmount.txt', 'w') #amount of jpegs
 out.write("JPEG AMOUNT: ")
