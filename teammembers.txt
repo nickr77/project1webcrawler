@@ -1,0 +1,22 @@
+Team Members: Steven Bock, Nick Roberts
+
+Responsibility Division:
+
+Both(Pair coding):
+Web Crawling portion (getting links, etc..., this took the most time)
+Stemming
+
+Steven Bock:
+Install script
+File output/input
+JPG/bad link counter
+
+Nicholas Roberts:
+Word Indexing
+Word frequency list
+Robots.txt handling
+Document ID's
+
+
+
+

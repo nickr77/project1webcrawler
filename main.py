@@ -94,7 +94,7 @@ print "Computing word frequency..."
 wordFreqency = []
 for x in words.keys():
     wordFreqency.append((str(x), len(words[x])))
-frequentWords = sorted(wordFreqency, key=lambda x: x[1])
+frequentWords = sorted(wordFreqency, key=lambda x: x[1]) #Sorts by last value in tuple (frequency count)
 frequentWords.reverse()
 
 #--------------- Console Output ------------------#
